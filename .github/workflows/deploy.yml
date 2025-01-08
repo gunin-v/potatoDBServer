@@ -40,4 +40,4 @@ jobs:
             /usr/local/bin/docker-compose down
             /usr/local/bin/docker-compose up --build -d
             pm2 delete potato-bd-server || true
-            pm2 start "docker-compose up --build -d" --name potato-bd-server
+            pm2 start "pnpm docker" --name potato-bd-server
