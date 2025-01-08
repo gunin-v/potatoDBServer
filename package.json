@@ -9,7 +9,8 @@
     "dev": "nodemon --watch src --exec ts-node src/server.ts",
     "test": "jest",
     "test:watch": "jest --watch",
-    "bd": "npx prisma studio"
+    "bd": "npx prisma studio",
+    "docker": "docker compose up -d"
   },
   "keywords": [],
   "author": "",
