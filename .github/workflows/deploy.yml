@@ -5,16 +5,18 @@ on:
   push:
     branches:
       - master
-  workflow_dispatch: # Добавляем возможность ручного запуска
+  workflow_dispatch:
 
 jobs:
   deploy-prod:
     runs-on: ubuntu-latest
 
     steps:
+      # ✅ Шаг 1: Клонирование репозитория
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
+      # ✅ Шаг 2: Копирование файлов на сервер
       - name: Copy files to server
         uses: appleboy/scp-action@master
         with:
@@ -25,6 +27,7 @@ jobs:
           source: "./*"
           target: ${{ secrets.SERVER_PATH }}
 
+      # ✅ Шаг 3: Перезапуск сервера
       - name: Restart server
         uses: appleboy/ssh-action@master
         with:
@@ -32,12 +35,13 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            # Перейдём в директорию проекта
             cd ${{ secrets.SERVER_PATH }}
-            git pull origin master
+
             export PORT=${{ secrets.PORT }}
             export DATABASE_URL=${{ secrets.DATABASE_URL }}
             export SWAGGER_SERVER_URL=${{ secrets.SWAGGER_SERVER_URL }}
-            /usr/local/bin/docker-compose down
-            /usr/local/bin/docker-compose up --build -d
+
             pm2 delete potato-bd-server || true
-            pm2 start "pnpm docker" --name potato-bd-server
+            pm2 start "pnpm run docker" --name potato-bd-server
+            pm2 save
