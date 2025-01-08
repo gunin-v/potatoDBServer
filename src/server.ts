@@ -1,10 +1,13 @@
+import dotenv from "dotenv";
 import express, { type Request, type Response } from "express";
 import cron from "node-cron";
-import { PORT } from "./constants";
 import logger from "./logger";
 import { parseAndSaveProductsPrices } from "./parser/parser";
 import router from "./routes";
 import { setupSwagger } from "./swagger";
+
+// Загрузка переменных окружения из .env файла
+dotenv.config();
 
 const app = express();
 
@@ -22,8 +25,8 @@ cron.schedule("0 0 * * *", async () => {
 });
 
 if (process.env.NODE_ENV !== "test") {
-  app.listen(PORT, () => {
-    logger.info(`Server is running on http://localhost:${PORT}`);
+  app.listen(process.env.PORT, () => {
+    logger.info(`Server is running on http://localhost:${process.env.PORT}`);
   });
 }
 
