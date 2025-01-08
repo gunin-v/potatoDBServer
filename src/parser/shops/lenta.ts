@@ -67,7 +67,7 @@ export const parseLenta = async (page: Page): Promise<Product[]> => {
   const filteredProducts = filterPotatoes(products);
 
   logger.info("🛒 [Лента] Парсинг завершен");
-  logger.info(filteredProducts);
+  logger.info(JSON.stringify(filteredProducts));
 
   return filteredProducts;
 };

@@ -82,7 +82,7 @@ export const parsePerekrestok = async (page: Page): Promise<Product[]> => {
   const filteredProducts = filterPotatoes(products);
 
   logger.info("🛒 [Перекресток] Парсинг завершен");
-  logger.info(filteredProducts);
+  logger.info(JSON.stringify(filteredProducts));
 
   return filteredProducts;
 };

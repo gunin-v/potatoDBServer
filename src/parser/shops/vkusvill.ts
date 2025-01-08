@@ -71,7 +71,7 @@ export const parseVkusvill = async (page: Page): Promise<Product[]> => {
   const filteredProducts = filterPotatoes(products);
 
   logger.info("🛒 [ВкусВилл] Парсинг завершен");
-  console.log(filteredProducts);
+  logger.info(JSON.stringify(filteredProducts));
 
   return filteredProducts;
 };

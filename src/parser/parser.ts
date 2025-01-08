@@ -1,8 +1,9 @@
-import { type Prisma, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import puppeteer from "puppeteer-extra";
 import AnonymizeUAPlugin from "puppeteer-extra-plugin-anonymize-ua";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import logger from "../logger";
+import { retry } from "./helpers";
 import { parseLenta } from "./shops/lenta";
 import { parseMagnet } from "./shops/magnit";
 import { parsePerekrestok } from "./shops/perekrestok";
@@ -20,28 +21,33 @@ export const parseAndSaveProductsPrices = async () => {
   const page = await browser.newPage();
   await page.setViewport({ width: 1920, height: 1080 });
 
-  const magnetPrices = await parseMagnet(page);
-  const perekrestokPrices = await parsePerekrestok(page);
-  const vkusvillPrices = await parseVkusvill(page);
-  const lentaPrices = await parseLenta(page);
-  const pyaterochkaPrices = await parsePyaterochka(page);
+  try {
+    const magnetPrices = await retry(() => parseMagnet(page), 5);
+    const perekrestokPrices = await retry(() => parsePerekrestok(page), 5);
+    const vkusvillPrices = await retry(() => parseVkusvill(page), 5);
+    const lentaPrices = await retry(() => parseLenta(page), 5);
+    const pyaterochkaPrices = await retry(() => parsePyaterochka(page), 5);
 
-  const allPrices = [
-    ...magnetPrices,
-    ...perekrestokPrices,
-    ...vkusvillPrices,
-    ...lentaPrices,
-    ...pyaterochkaPrices,
-  ];
+    const allPrices = [
+      ...magnetPrices,
+      ...perekrestokPrices,
+      ...vkusvillPrices,
+      ...lentaPrices,
+      ...pyaterochkaPrices,
+    ];
 
-  for (const product of allPrices) {
-    await prisma.product.create({
-      data: product,
-    });
+    for (const product of allPrices) {
+      await prisma.product.create({
+        data: product,
+      });
+    }
+
+    logger.info("🔥 Данные успешно сохранены в базу данных");
+    return allPrices;
+  } catch (error) {
+    logger.error("❌ Ошибка парсинга данных: ", error);
+    throw error;
+  } finally {
+    await browser.close();
   }
-
-  logger.info("🔥 Данные успешно сохранены в базу данных");
-  await browser.close();
-
-  return allPrices;
 };

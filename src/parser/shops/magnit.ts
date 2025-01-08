@@ -9,9 +9,6 @@ export const parseMagnet = async (page: Page): Promise<Product[]> => {
     "https://magnit.ru/search?term=%D0%BA%D0%B0%D1%80%D1%82%D0%BE%D1%88%D0%BA%D0%B0"
   );
 
-  // Делаем скриншот страницы для отладки
-  await page.screenshot({ path: "magnit_page.png" });
-
   // Дожидаемся появления карточек товаров
   await page.waitForSelector(".unit-catalog-product-preview-description");
 
@@ -65,7 +62,7 @@ export const parseMagnet = async (page: Page): Promise<Product[]> => {
   const filteredProducts = filterPotatoes(products);
 
   logger.info("🛒 [Магнит] Парсинг завершен");
-  logger.info(filteredProducts);
+  logger.info(JSON.stringify(filteredProducts));
 
   return filteredProducts;
 };
