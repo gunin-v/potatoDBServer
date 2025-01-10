@@ -6,8 +6,16 @@ WORKDIR /app
 # Устанавливаем pnpm
 RUN npm install -g pnpm
 
+# Копируем package.json и pnpm-lock.yaml
+COPY package.json pnpm-lock.yaml ./
+
+# Устанавливаем зависимости
+RUN pnpm install
+
+# Копируем остальные файлы проекта
+COPY . .
+
 RUN apt-get update && apt-get install -y \
-    cron \
     libnss3 \
     libatk1.0-0 \
     libatk-bridge2.0-0 \
@@ -29,15 +37,6 @@ RUN apt-get update && apt-get install -y \
     libgudev-1.0-0 \
     --no-install-recommends && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Копируем package.json и pnpm-lock.yaml
-COPY package.json pnpm-lock.yaml ./
-
-# Устанавливаем зависимости
-RUN pnpm install
-
-# Копируем остальные файлы проекта
-COPY . .
 
 # Генерация типов Prisma
 RUN pnpm prisma generate
