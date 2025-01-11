@@ -15,8 +15,7 @@ RUN pnpm install
 # Копируем остальные файлы проекта
 COPY . .
 
-RUN apt-get update >> /var/log/apt-install.log && \
-    apt-get install -y \
+RUN apt-get update && apt-get install -y \
     libnss3 \
     libatk1.0-0 \
     libatk-bridge2.0-0 \
@@ -37,8 +36,25 @@ RUN apt-get update >> /var/log/apt-install.log && \
     libegl1 \
     libgudev-1.0-0 \
     libxdamage1 \
-    --no-install-recommends >> /var/log/apt-install.log && \
+    libxfixes3 \
+    libxtst6 \
+    libxshmfence1 \
+    libxrender1 \
+    libx11-xcb1 \
+    libxcb1 \
+    libdbus-1-3 \
+    libexpat1 \
+    libfontconfig1 \
+    libfreetype6 \
+    libglib2.0-0 \
+    libpng16-16 \
+    libxext6 \
+    libx11-6 \
+    ca-certificates \
+    fonts-liberation \
+    --no-install-recommends && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
+
 
 # Генерация типов Prisma
 RUN pnpm prisma generate
