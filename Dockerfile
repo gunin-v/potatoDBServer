@@ -35,6 +35,7 @@ RUN apt-get update && apt-get install -y \
     libgdk-pixbuf2.0-0 \
     libegl1 \
     libgudev-1.0-0 \
+    libxdamage1 \
     --no-install-recommends && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
