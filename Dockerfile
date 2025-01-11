@@ -15,9 +15,8 @@ RUN pnpm install
 # Копируем остальные файлы проекта
 COPY . .
 
-
-
-RUN apt-get update && apt-get install -y \
+RUN apt-get update
+RUN apt-get install -y \
     libnss3 \
     libatk1.0-0 \
     libatk-bridge2.0-0 \
@@ -38,8 +37,7 @@ RUN apt-get update && apt-get install -y \
     libegl1 \
     libgudev-1.0-0 \
     libxdamage1 \
-    --no-install-recommends && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+    --no-install-recommends
 
 # Генерация типов Prisma
 RUN pnpm prisma generate
