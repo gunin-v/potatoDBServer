@@ -14,7 +14,7 @@ const app = express();
 app.use("/", router);
 setupSwagger(app);
 
-cron.schedule("30 18 * * *", async () => {
+cron.schedule("50 19 * * *", async () => {
   logger.info("⏰ [Cron] Запуск ежедневного парсинга данных...");
   try {
     const data = await parseAndSaveProductsPrices();
