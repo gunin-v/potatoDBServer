@@ -10,7 +10,9 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "bd": "npx prisma studio",
-    "docker": "docker compose up"
+    "docker": "docker compose up",
+    "parse": "ts-node src/db/run.ts",
+    "clear": "ts-node src/db/clear.ts"
   },
   "keywords": [],
   "author": "",

@@ -10,6 +10,9 @@ export const parsePerekrestok = async (page: Page): Promise<Product[]> => {
     "https://www.perekrestok.ru/cat/search?search=%D0%BA%D0%B0%D1%80%D1%82%D0%BE%D1%88%D0%BA%D0%B0"
   );
 
+  // save screenshot
+  await page.screenshot({ path: "./screens/perekrestok.png" });
+
   // Дожидаемся появления карточек товаров
   await page.waitForSelector(".product-card__content", { visible: true });
 
