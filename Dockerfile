@@ -59,6 +59,9 @@ RUN apt-get update && apt-get install -y \
 # Генерация типов Prisma
 RUN pnpm prisma generate
 
+# Устанавливаем ts-node
+RUN pnpm add ts-node typescript -D
+
 # Компилируем TypeScript код
 RUN pnpm run build
 
