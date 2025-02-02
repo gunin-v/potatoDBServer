@@ -1,7 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import puppeteer from "puppeteer-extra";
-import AnonymizeUAPlugin from "puppeteer-extra-plugin-anonymize-ua";
-import StealthPlugin from "puppeteer-extra-plugin-stealth";
+import { chromium } from "playwright";
 import logger from "../logger";
 import { retry } from "./helpers";
 import { parseLenta } from "./shops/lenta";
@@ -10,18 +8,27 @@ import { parsePerekrestok } from "./shops/perekrestok";
 import { parsePyaterochka } from "./shops/pyaterochka";
 import { parseVkusvill } from "./shops/vkusvill";
 
-puppeteer.use(AnonymizeUAPlugin());
-puppeteer.use(StealthPlugin());
-
 const prisma = new PrismaClient();
 
 export const parseAndSaveProductsPrices = async () => {
   logger.info("🚀 Запускаем парсинг...");
-  const browser = await puppeteer.launch({
+  const browser = await chromium.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
   });
-  const page = await browser.newPage();
-  await page.setViewport({ width: 1920, height: 1080 });
+  const context = await browser.newContext({
+    userAgent:
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36",
+    viewport: { width: 1920, height: 1080 }, // Устанавливаем стандартный размер окна
+    javaScriptEnabled: true, // Убедитесь, что JS включён
+  });
+  const page = await context.newPage();
+  await page.setExtraHTTPHeaders({
+    "Accept-Language": "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7",
+    Accept:
+      "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+  });
+  await page.setViewportSize({ width: 1920, height: 1080 });
+  await page.mouse.move(100, 200);
 
   try {
     const magnetPrices = await retry(() => parseMagnet(page), 5);

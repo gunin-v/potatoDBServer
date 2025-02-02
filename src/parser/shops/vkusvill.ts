@@ -1,4 +1,4 @@
-import type { Page } from "puppeteer";
+import type { Page } from "playwright";
 import logger from "../../logger";
 import { filterPotatoes } from "../helpers";
 import type { Product } from "../types";
@@ -11,7 +11,7 @@ export const parseVkusvill = async (page: Page): Promise<Product[]> => {
   );
 
   // Дожидаемся появления карточек товаров
-  await page.waitForSelector(".ProductCard__content", { visible: true });
+  await page.waitForSelector(".ProductCard__content", { state: "visible" });
 
   const products: Product[] = await page.evaluate(() => {
     const productElements = document.querySelectorAll(".ProductCard__content");
