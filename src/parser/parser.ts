@@ -1,5 +1,7 @@
 import { PrismaClient } from "@prisma/client";
-import { chromium } from "playwright";
+import { chromium } from "playwright-extra";
+import stealth from "puppeteer-extra-plugin-stealth";
+
 import logger from "../logger";
 import { retry } from "./helpers";
 import { parseLenta } from "./shops/lenta";
@@ -10,9 +12,12 @@ import { parseVkusvill } from "./shops/vkusvill";
 
 const prisma = new PrismaClient();
 
+chromium.use(stealth());
+
 export const parseAndSaveProductsPrices = async () => {
   logger.info("🚀 Запускаем парсинг...");
   const browser = await chromium.launch({
+    headless: false,
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
   });
   const context = await browser.newContext({
@@ -31,18 +36,18 @@ export const parseAndSaveProductsPrices = async () => {
   await page.mouse.move(100, 200);
 
   try {
-    const magnetPrices = await retry(() => parseMagnet(page), 5);
-    const perekrestokPrices = await retry(() => parsePerekrestok(page), 5);
-    const vkusvillPrices = await retry(() => parseVkusvill(page), 5);
+    // const magnetPrices = await retry(() => parseMagnet(page), 5);
+    // const perekrestokPrices = await retry(() => parsePerekrestok(page), 5);
+    // const vkusvillPrices = await retry(() => parseVkusvill(page), 5);
     const lentaPrices = await retry(() => parseLenta(page), 5);
-    const pyaterochkaPrices = await retry(() => parsePyaterochka(page), 5);
+    // const pyaterochkaPrices = await retry(() => parsePyaterochka(page), 5);
 
     const allPrices = [
-      ...magnetPrices,
-      ...perekrestokPrices,
-      ...vkusvillPrices,
+      // ...magnetPrices,
+      // ...perekrestokPrices,
+      // ...vkusvillPrices,
       ...lentaPrices,
-      ...pyaterochkaPrices,
+      // ...pyaterochkaPrices,
     ];
 
     for (const product of allPrices) {

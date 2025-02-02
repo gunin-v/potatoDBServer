@@ -7,8 +7,13 @@ export const parseLenta = async (page: Page): Promise<Product[]> => {
   logger.info("🛒 [Лента] Начинаем парсинг...");
 
   await page.goto(
-    "https://lenta.com/search/%D0%BA%D0%B0%D1%80%D1%82%D0%BE%D1%88%D0%BA%D0%B0/"
+    "http://www.lenta.com/search/%D0%BA%D0%B0%D1%80%D1%82%D0%BE%D1%88%D0%BA%D0%B0/"
   );
+
+  await page.evaluate(() => window.scrollBy(0, 500));
+  await page.waitForTimeout(1000 + Math.random() * 1000);
+
+  await page.mouse.move(123, 612);
 
   // Дождитесь появления карточек продуктов
   await page.waitForSelector(".product-card_middle-content", {
