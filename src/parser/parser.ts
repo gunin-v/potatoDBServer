@@ -23,8 +23,8 @@ export const parseAndSaveProductsPrices = async () => {
   const context = await browser.newContext({
     userAgent:
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36",
-    viewport: { width: 1920, height: 1080 }, // Устанавливаем стандартный размер окна
-    javaScriptEnabled: true, // Убедитесь, что JS включён
+    viewport: { width: 1920, height: 1080 },
+    javaScriptEnabled: true,
   });
   const page = await context.newPage();
   await page.setExtraHTTPHeaders({
@@ -36,18 +36,18 @@ export const parseAndSaveProductsPrices = async () => {
   await page.mouse.move(100, 200);
 
   try {
-    // const magnetPrices = await retry(() => parseMagnet(page), 5);
-    // const perekrestokPrices = await retry(() => parsePerekrestok(page), 5);
-    // const vkusvillPrices = await retry(() => parseVkusvill(page), 5);
+    const magnetPrices = await retry(() => parseMagnet(page), 5);
+    const perekrestokPrices = await retry(() => parsePerekrestok(page), 5);
+    const vkusvillPrices = await retry(() => parseVkusvill(page), 5);
     const lentaPrices = await retry(() => parseLenta(page), 5);
-    // const pyaterochkaPrices = await retry(() => parsePyaterochka(page), 5);
+    const pyaterochkaPrices = await retry(() => parsePyaterochka(page), 5);
 
     const allPrices = [
-      // ...magnetPrices,
-      // ...perekrestokPrices,
-      // ...vkusvillPrices,
+      ...magnetPrices,
+      ...perekrestokPrices,
+      ...vkusvillPrices,
       ...lentaPrices,
-      // ...pyaterochkaPrices,
+      ...pyaterochkaPrices,
     ];
 
     for (const product of allPrices) {
