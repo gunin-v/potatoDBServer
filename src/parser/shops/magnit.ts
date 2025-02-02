@@ -1,4 +1,4 @@
-import type { Page } from "puppeteer";
+import type { Page } from "playwright";
 import logger from "../../logger";
 import { filterPotatoes } from "../helpers";
 import type { Product } from "../types";

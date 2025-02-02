@@ -1,4 +1,4 @@
-import type { Page } from "puppeteer";
+import type { Page } from "playwright";
 import logger from "../../logger";
 import { filterPotatoes } from "../helpers";
 import type { Product } from "../types";
@@ -11,10 +11,10 @@ export const parsePerekrestok = async (page: Page): Promise<Product[]> => {
   );
 
   // save screenshot
-  await page.screenshot({ path: "./screens/perekrestok.png" });
+  await page.screenshot({ path: "perekrestok.png" });
 
   // Дожидаемся появления карточек товаров
-  await page.waitForSelector(".product-card__content", { visible: true });
+  await page.waitForSelector(".product-card__content", { state: "visible" });
 
   const products: Product[] = await page.evaluate(() => {
     const productElements = document.querySelectorAll(".product-card__content");

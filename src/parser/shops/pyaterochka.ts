@@ -1,4 +1,4 @@
-import type { Page } from "puppeteer";
+import type { Page } from "playwright";
 import logger from "../../logger";
 import { filterPotatoes } from "../helpers";
 import type { Product } from "../types";
@@ -13,7 +13,7 @@ export const parsePyaterochka = async (page: Page): Promise<Product[]> => {
   await page.type('input[placeholder="Поиск"]', "картошка");
 
   // Дождитесь появления элемента с id "search-menu"
-  await page.waitForSelector("#search-menu", { visible: true });
+  await page.waitForSelector("#search-menu", { state: "visible" });
 
   // Дождитесь появления первого элемента с текстом "Картофель"
   await page.waitForFunction(
