@@ -1,5 +1,7 @@
 import { PrismaClient } from "@prisma/client";
-import { chromium } from "playwright";
+import { chromium } from "playwright-extra";
+import stealth from "puppeteer-extra-plugin-stealth";
+
 import logger from "../logger";
 import { retry } from "./helpers";
 import { parseLenta } from "./shops/lenta";
@@ -10,16 +12,19 @@ import { parseVkusvill } from "./shops/vkusvill";
 
 const prisma = new PrismaClient();
 
+chromium.use(stealth());
+
 export const parseAndSaveProductsPrices = async () => {
   logger.info("🚀 Запускаем парсинг...");
   const browser = await chromium.launch({
+    headless: false,
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
   });
   const context = await browser.newContext({
     userAgent:
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36",
-    viewport: { width: 1920, height: 1080 }, // Устанавливаем стандартный размер окна
-    javaScriptEnabled: true, // Убедитесь, что JS включён
+    viewport: { width: 1920, height: 1080 },
+    javaScriptEnabled: true,
   });
   const page = await context.newPage();
   await page.setExtraHTTPHeaders({

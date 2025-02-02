@@ -52,6 +52,9 @@ RUN apt-get update && apt-get install -y \
     libx11-6 \
     ca-certificates \
     fonts-liberation \
+    libXcursor.so.1 \
+    libgtk-3.so.0 \
+    libgdk-3.so.0 \
     --no-install-recommends && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
