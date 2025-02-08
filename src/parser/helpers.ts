@@ -50,5 +50,6 @@ export const retry = async <T>(
       logger.error(`Попытка ${i + 1} не удалась: ${errorMessage}`);
     }
   }
-  throw new Error("Все попытки не удались");
+
+  throw new Error(`Все ${retries} попыток завершились неудачей`);
 };
