@@ -65,6 +65,10 @@ RUN pnpm prisma generate
 # Устанавливаем ts-node
 RUN pnpm add ts-node typescript -D
 
+
+# Ставим браузеры Playwright
+RUN pnpm exec playwright install
+
 # Компилируем TypeScript код
 RUN pnpm run build
 
