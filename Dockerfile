@@ -9,12 +9,6 @@ RUN npm install -g pnpm
 # Копируем package.json и pnpm-lock.yaml
 COPY package.json pnpm-lock.yaml ./
 
-# Устанавливаем зависимости
-RUN pnpm install
-
-# Копируем остальные файлы проекта
-COPY . .
-
 RUN apt-get update && apt-get install -y \
     libnss3 \
     libatk1.0-0 \
@@ -64,6 +58,15 @@ RUN pnpm prisma generate
 
 # Устанавливаем ts-node
 RUN pnpm add ts-node typescript -D
+
+# Устанавливаем зависимости
+RUN pnpm install
+
+# Копируем остальные файлы проекта
+COPY . .
+
+# Ставим браузеры Playwright
+RUN pnpm add playwright
 
 # Компилируем TypeScript код
 RUN pnpm run build

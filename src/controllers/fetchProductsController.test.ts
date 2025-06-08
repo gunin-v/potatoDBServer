@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import type { Request, Response } from "express";
-import { fetchProducts } from "./fetch";
+import { fetchProductsController } from "./fetchProductsController";
 
 jest.mock("@prisma/client", () => {
   const mPrismaClient = {
@@ -41,7 +41,7 @@ describe("fetchProducts", () => {
     ];
     (prisma.product.findMany as jest.Mock).mockResolvedValue(mockProducts);
 
-    await fetchProducts(req as Request, res as Response);
+    await fetchProductsController(req as Request, res as Response);
 
     expect(res.json).toHaveBeenCalledWith(mockProducts);
     expect(prisma.product.findMany).toHaveBeenCalledTimes(1);
@@ -60,7 +60,7 @@ describe("fetchProducts", () => {
     ];
     (prisma.product.findMany as jest.Mock).mockResolvedValue(mockProducts);
 
-    await fetchProducts(req as Request, res as Response);
+    await fetchProductsController(req as Request, res as Response);
 
     expect(res.json).toHaveBeenCalledWith(mockProducts);
     expect(prisma.product.findMany).toHaveBeenCalledWith({
@@ -82,7 +82,7 @@ describe("fetchProducts", () => {
     ];
     (prisma.product.findMany as jest.Mock).mockResolvedValue(mockProducts);
 
-    await fetchProducts(req as Request, res as Response);
+    await fetchProductsController(req as Request, res as Response);
 
     expect(res.json).toHaveBeenCalledWith(mockProducts);
     expect(prisma.product.findMany).toHaveBeenCalledWith({
@@ -99,7 +99,7 @@ describe("fetchProducts", () => {
     ];
     (prisma.product.findMany as jest.Mock).mockResolvedValue(mockProducts);
 
-    await fetchProducts(req as Request, res as Response);
+    await fetchProductsController(req as Request, res as Response);
 
     expect(res.json).toHaveBeenCalledWith(mockProducts);
     expect(prisma.product.findMany).toHaveBeenCalledWith({
@@ -112,7 +112,7 @@ describe("fetchProducts", () => {
   it("should handle invalid date_from format", async () => {
     req.query = { date_from: "invalid-date" };
 
-    await fetchProducts(req as Request, res as Response);
+    await fetchProductsController(req as Request, res as Response);
 
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.send).toHaveBeenCalledWith(
@@ -123,7 +123,7 @@ describe("fetchProducts", () => {
   it("should handle invalid date_to format", async () => {
     req.query = { date_to: "invalid-date" };
 
-    await fetchProducts(req as Request, res as Response);
+    await fetchProductsController(req as Request, res as Response);
 
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.send).toHaveBeenCalledWith(
@@ -134,7 +134,7 @@ describe("fetchProducts", () => {
   it("should handle invalid limit", async () => {
     req.query = { limit: "-10" };
 
-    await fetchProducts(req as Request, res as Response);
+    await fetchProductsController(req as Request, res as Response);
 
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.send).toHaveBeenCalledWith("Limit must be a positive number.");
@@ -143,7 +143,7 @@ describe("fetchProducts", () => {
   it("should handle invalid offset", async () => {
     req.query = { offset: "-10" };
 
-    await fetchProducts(req as Request, res as Response);
+    await fetchProductsController(req as Request, res as Response);
 
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.send).toHaveBeenCalledWith(
