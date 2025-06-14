@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client";
-import { ProductQueryDTO } from "./dto";
-import { TDBCLient } from "../../db/prismaClient";
+import type { TDBCLient } from "../../db/prismaClient";
+import type { ProductQueryDTO } from "./dto";
 
 export async function getProducts(dto: ProductQueryDTO, db: TDBCLient) {
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   const where: any = {};
   if (dto.date_from || dto.date_to) {
     where.date = {};
