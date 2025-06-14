@@ -68,11 +68,8 @@ COPY . .
 # Ставим браузеры Playwright
 RUN pnpm add playwright
 
-# Компилируем TypeScript код
-RUN pnpm run build
-
 # Открываем порт
 EXPOSE 4000
 
-# Запускаем приложение
-CMD ["pnpm", "start"]
+# Запускаем приложение с билдом
+CMD ["pnpm", "run", "start:prod"]
