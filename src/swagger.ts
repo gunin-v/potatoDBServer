@@ -16,7 +16,7 @@ const options = {
       },
     ],
   },
-  apis: ["./src/services/products/fetch.ts"], // Укажите пути к файлам с аннотациями Swagger
+  apis: ["./src/controllers/*.ts"],
 };
 
 const specs = swaggerJsdoc(options);
