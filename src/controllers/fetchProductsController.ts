@@ -1,10 +1,10 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
+import { prisma } from "../db/prismaClient";
 import {
+  type ProductQueryDTO,
   validateProductQuery,
-  ProductQueryDTO,
 } from "../services/products/dto";
 import { getProducts } from "../services/products/productService";
-import { prisma } from "../db/prismaClient";
 
 /**
  * @swagger

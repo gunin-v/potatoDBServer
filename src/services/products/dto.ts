@@ -13,13 +13,13 @@ export const productQuerySchema = yup.object({
     .string()
     .optional()
     .test("is-date", "Invalid date_from format. Use YYYY-MM-DD.", (value) =>
-      !value ? true : !isNaN(Date.parse(value))
+      !value ? true : !Number.isNaN(Date.parse(value))
     ),
   date_to: yup
     .string()
     .optional()
     .test("is-date", "Invalid date_to format. Use YYYY-MM-DD.", (value) =>
-      !value ? true : !isNaN(Date.parse(value))
+      !value ? true : !Number.isNaN(Date.parse(value))
     ),
   store: yup.string().optional(),
   limit: yup
@@ -40,7 +40,10 @@ export function validateProductQuery(dto: ProductQueryDTO): string | null {
   try {
     productQuerySchema.validateSync(dto);
     return null;
-  } catch (e: any) {
-    return e.message;
+  } catch (e: unknown) {
+    if (e instanceof Error) {
+      return e.message;
+    }
+    return "Unknown validation error";
   }
 }

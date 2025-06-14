@@ -1,4 +1,6 @@
-FROM node:20
+FROM node:20-slim-bullseye
+
+RUN apt-get update && apt-get upgrade -y
 
 # Устанавливаем рабочую директорию
 WORKDIR /app
