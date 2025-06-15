@@ -1,4 +1,4 @@
-FROM node:20-slim-bullseye
+FROM node:24.2.0-bookworm-slim
 
 RUN apt-get update && apt-get upgrade -y
 
@@ -48,24 +48,23 @@ RUN apt-get update && apt-get install -y \
     libx11-6 \
     ca-certificates \
     fonts-liberation \
-    libXcursor.so.1 \
-    libgtk-3.so.0 \
-    libgdk-3.so.0 \
+    libxcursor1 \
+    libgtk-3-0 \
     --no-install-recommends && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-
-# Генерация типов Prisma
-RUN pnpm prisma generate
-
-# Устанавливаем ts-node
-RUN pnpm add ts-node typescript -D
 
 # Устанавливаем зависимости
 RUN pnpm install
 
 # Копируем остальные файлы проекта
 COPY . .
+
+# Генерация типов Prisma
+RUN pnpm prisma generate
+
+# Устанавливаем ts-node
+RUN pnpm add ts-node typescript -D
 
 # Ставим браузеры Playwright
 RUN pnpm add playwright

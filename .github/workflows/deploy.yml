@@ -35,17 +35,6 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-            [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
-            export PATH=$PATH:$HOME/.nvm/versions/node/$(nvm version)/bin
-
             cd ${{ secrets.SERVER_PATH }}
-
-            export PORT=${{ secrets.PORT }}
-            export DATABASE_URL=${{ secrets.DATABASE_URL }}
-            export SWAGGER_SERVER_URL=${{ secrets.SWAGGER_SERVER_URL }}
-
-            pm2 delete potato-bd-server || true
-            pm2 start "pnpm run docker" --name potato-bd-server
-            pm2 save
+            docker compose down || true
+            docker compose up -d --build
