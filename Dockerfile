@@ -65,9 +65,7 @@ RUN pnpm prisma generate
 
 # Устанавливаем ts-node
 RUN pnpm add ts-node typescript -D
-
-# Ставим браузеры Playwright
-RUN pnpm add playwright
+RUN pnpm exec playwright install --with-deps
 
 # Открываем порт
 EXPOSE 4000
